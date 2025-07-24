@@ -1,69 +1,157 @@
-# React + TypeScript + Vite
+# 커플 각서 작성 기능 PRD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 개요
+시그널링 앱 실험실 탭에 추가될 커플 각서 작성 기능으로, 커플이 재미있게 약속을 정하고 각서 형태로 출력할 수 있는 웹뷰 기능
 
-Currently, two official plugins are available:
+## 기능 명세
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. 기본 정보 입력
+**당사자 정보 (갑/을)**
+- 이름 (텍스트 입력)
+- 주민등록번호 앞자리 (6자리)
+- 주소 (텍스트 입력)
+- 서명 (텍스트 입력 + 손글씨 서명)
 
-## Expanding the ESLint configuration
+### 2. 특약 조항 관리
+**기본 템플릿**
+- "술은 일주일에 한 번 이상 마시지 않으며, 꼭 사전에 연락을 미리 해줄 것."
+- "친구를 만날 때에도 3시간에 한 번 이상, 자리를 옮길 때에는 꼭 연락을 해줄 것."
+- "이성친구와 단둘이 만나지 않을것."
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**편집 기능**
+- 특약 조항 수정/삭제
+- 새 특약 조항 추가
+- 자유 입력 가능
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**추가 특약사항**
+- 자유 텍스트 입력
+- 플레이스홀더: "위 중 하나라도 지켜지지 않을 시에는 갑은 을에게 교촌 허니콤보를 3회 사줄 것을 약속한다."
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 3. 서명 기능
+**텍스트 서명**
+- 이름 텍스트 입력
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**손글씨 서명**
+- 캔버스 기반 그리기 기능
+- 터치/마우스 지원
+- 지우기/다시 그리기 기능
+
+**서명 표시**
+- 미리보기에서 텍스트 + 손글씨 함께 표시
+
+### 4. 미리보기 및 출력
+**미리보기 팝업**
+- 실제 각서 형태로 렌더링
+- 작성일 자동 삽입 (현재 날짜)
+- 서명란 포함
+- 법적 효력 안내 문구
+
+**내보내기 옵션**
+- 복사 (클립보드)
+- 파일 저장
+- 네이티브 공유하기
+- 메시지 공유
+- 카카오톡 공유
+- 인스타그램 공유
+
+## UI/UX 명세
+
+### 디자인 시스템
+- 색상: Pink 계열 (focus: pink-500, 버튼: pink-500/600)
+- 배경: Gradient (pink-50 to purple-50)
+- 카드 형태의 입력 폼
+- 그림자 효과 적용
+
+### 레이아웃
+- 모바일 웹뷰 최적화
+- 단일 컬럼 레이아웃
+- 섹션별 구분 (당사자 정보, 특약 조항, 추가 특약)
+
+### 인터랙션
+- 실시간 입력 반영
+- 버튼 hover 효과
+- 팝업 모달 (미리보기, 서명, 공유)
+- 바텀시트 (공유 옵션)
+
+## 기술 스택
+
+### Frontend
+- React + TypeScript
+- Tailwind CSS (CDN)
+- Lucide React (아이콘)
+- Canvas API (서명 기능)
+
+### 상태 관리
+- React useState
+- 로컬 상태 관리 (localStorage 미사용)
+
+### 파일 구조
+```
+src/
+├── App.tsx          # 메인 앱 컴포넌트
+├── CoupleContract.tsx # 각서 작성 컴포넌트
+├── index.css         # Tailwind 설정
+└── main.tsx          # 앱 진입점
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 데이터 구조
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```typescript
+interface ContractData {
+  person1: {
+    name: string;
+    address: string;
+    birthNumber: string;
+    signature: string;        // 텍스트 서명
+    drawnSignature: string;   // 손글씨 서명 (base64)
+  };
+  person2: { /* 동일 구조 */ };
+  specialTerms: string[];     // 특약 조항 배열
+  customTerms: string;        // 추가 특약
+  date: string;              // 작성일
+}
 ```
+
+## 개발 가이드
+
+### 설치 및 실행
+```bash
+npm install
+npm run dev
+```
+
+### 주요 컴포넌트
+- `CoupleContract`: 메인 컴포넌트
+- 서명 캔버스: Canvas API 활용
+- 미리보기 모달: 실제 각서 렌더링
+- 공유 바텀시트: 네이티브 공유 연동
+
+### 브랜딩
+- 하단에 Signaling 브랜딩 표시 (미리보기에만)
+- "본 각서는 법적 효력은 없지만, Signaling 팀이 지켜보고 있습니다."
+- "커플들의 완벽한 캘린더, Signaling"
+
+## QA 체크리스트
+
+### 기능 테스트
+- [ ] 모든 입력 필드 정상 작동
+- [ ] 특약 조항 추가/삭제 기능
+- [ ] 서명 기능 (텍스트 + 손글씨)
+- [ ] 미리보기 정확한 렌더링
+- [ ] 공유 기능 동작
+
+### 반응형 테스트
+- [ ] 모바일 웹뷰 최적화
+- [ ] 터치 인터랙션 지원
+- [ ] 키보드 입력 대응
+
+### 크로스 브라우저
+- [ ] iOS Safari
+- [ ] Android Chrome
+- [ ] 웹뷰 환경
+
+## 배포 정보
+
+**Repository**: https://github.com/bluebluuee/signaling-lab-couple-contract
+
+**통합 방법**: 시그널링 앱 실험실 탭에 웹뷰로 임베드
